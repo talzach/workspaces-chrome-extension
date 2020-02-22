@@ -1,0 +1,16 @@
+{
+    "manifest_version": 2,
+    "name": "URL to Window",
+    "version": "0.1",
+    "permissions": [
+      "tabs"
+    ],
+    "background": {
+        "scripts": ["background.js", "workspace-tab-organizer.js"],
+        "persistent": false
+    },
+    "options_ui": {
+      "page": "options.html",
+      "open_in_tab": false
+    }
+  }

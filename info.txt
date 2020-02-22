@@ -1,0 +1,13 @@
+
+// https://developer.chrome.com/extensions/tabs#property-Tab-pendingUrl
+
+
+
+    // "content_scripts": [
+    //     {
+    //       "matches": [
+    //         "<all_urls>"
+    //       ],
+    //       "js": ["content.js"]
+    //     }
+    // ]
