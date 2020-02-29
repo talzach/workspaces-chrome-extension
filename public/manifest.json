@@ -3,14 +3,15 @@
     "name": "URL to Window",
     "version": "0.1",
     "permissions": [
-      "tabs"
+        "tabs",
+        "storage"
     ],
     "background": {
         "scripts": ["background.js", "workspace-tab-organizer.js"],
         "persistent": false
     },
     "options_ui": {
-      "page": "options.html",
-      "open_in_tab": false
+        "page": "index.html",
+        "open_in_tab": true
     }
-  }
+}
