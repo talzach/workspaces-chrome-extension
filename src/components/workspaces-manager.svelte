@@ -1,5 +1,6 @@
 <script>
   import AddItem from "./add-item.svelte";
+  import WorkspacesDrawer from "./workspaces-drawer.svelte";
   import Drawer, {
     Content,
     Header,
@@ -23,6 +24,10 @@
     selectedWorkspace = createdWorkspace;
   }
 
+  function selectWorkspace(event) {
+    selectedWorkspace = event.detail;
+  }
+
   function addUrl(event) {
     selectedWorkspace.hostnames = [
       ...selectedWorkspace.hostnames,
@@ -41,15 +46,6 @@
     border: 1px solid rgba(0, 0, 0, 0.1);
     overflow: hidden;
     z-index: 0;
-  }
-  .drawer-content {
-    padding: 16px;
-    height: 100%;
-    width: 100%;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
   }
   .main-content {
     padding: 16px;
@@ -72,23 +68,10 @@
 </style>
 
 <div class="drawer-container">
-  <Drawer>
-    <Content>
-      <div class="drawer-content">
-        <List>
-          {#each workspaces as workspace}
-            <Item on:click={() => (selectedWorkspace = workspace)}>
-              <Text>{workspace.name}</Text>
-            </Item>
-          {/each}
-        </List>
-        <br />
-        <div class="add-item-container">
-          <AddItem label="New Workspace" on:newItem={addWorkspace} />
-        </div>
-      </div>
-    </Content>
-  </Drawer>
+  <WorkspacesDrawer
+    {workspaces}
+    on:addWorkspace={addWorkspace}
+    on:selectWorkspace={selectWorkspace} />
 
   <main class="main-content">
     <div class="url-list">
