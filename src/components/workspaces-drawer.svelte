@@ -1,13 +1,7 @@
 <script>
-  import Drawer, {
-    Content,
-    Header,
-    Title,
-    Subtitle,
-    Scrim
-  } from "@smui/drawer";
-  import List, { Item, Text } from "@smui/list";
   import AddItem from "./add-item.svelte";
+  import Drawer, { Content } from "@smui/drawer";
+  import List, { Item, Text } from "@smui/list";
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
@@ -20,7 +14,6 @@
   function selectWorkspace(workspace) {
     dispatch("selectWorkspace", workspace);
   }
-
 </script>
 
 <style>
