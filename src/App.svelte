@@ -1,16 +1,17 @@
 <script>
-  import Drawer, {
-    AppContent
-  } from "@smui/drawer";
-  import WorkspacesManager from './WorkspacesManager.svelte';
+  import WorkspacesManager from "./components/workspaces-manager.svelte";
+  import Drawer, { AppContent } from "@smui/drawer";
+  import { getWorkspacesFromStorage } from "./workspaces-service.js";
 
   let workspaces = [];
   let isLoaded = false;
 
-  chrome.storage.sync.get(["workspaces"], result => {
-    workspaces = result.workspaces;
+  initialize();
+
+  async function initialize() {
+    workspaces = await getWorkspacesFromStorage();
     isLoaded = true;
-  });
+  }
 </script>
 
 <h1>URL Workspaces</h1>
@@ -18,8 +19,9 @@
 <svelte:head>
   <title>URL Workspaces</title>
 </svelte:head>
+
 <AppContent class="app-content">
-  {#if isLoaded === true}
-    <WorkspacesManager workspaces={workspaces}></WorkspacesManager>
+  {#if isLoaded}
+    <WorkspacesManager {workspaces} />
   {/if}
 </AppContent>

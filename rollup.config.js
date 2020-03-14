@@ -12,6 +12,7 @@ export default {
 	output: {
 		sourcemap: true,
 		format: 'iife',
+		sourcemap: 'inline',
 		name: 'app',
 		file: 'public/build/bundle.js'
 	},
