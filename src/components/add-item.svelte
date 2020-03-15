@@ -6,13 +6,19 @@
   export let type;
   export let label;
   const dispatch = createEventDispatcher();
-  let newItem = '';
+  let newItem = "";
 
   function addItem() {
     dispatch("newItem", newItem);
-    newItem = '';
+    newItem = "";
   }
 </script>
+
+<style>
+.icon-wrapper {
+  bottom: 10px;
+}
+</style>
 
 <Textfield
   withLeadingIcon
@@ -20,8 +26,12 @@
   fullwidth
   lineRipple={true}
   bind:value={newItem}
-  label={label}
-  type={type}
+  {label}
+  {type}
   input$aria-controls="helper-text-standard-a"
   input$aria-describedby="helper-text-standard-a" />
-<IconButton class="material-icons" on:click={addItem}>add_to_photos</IconButton>
+<span class="icon-wrapper">
+  <IconButton class="material-icons" on:click={addItem}>
+    add_to_photos
+  </IconButton>
+</span>

@@ -15,6 +15,10 @@
 </script>
 
 <style>
+  :global(.root) {
+    margin: 20px;
+  }
+
   :global(.app-content) {
     flex: auto;
     overflow: auto;
@@ -27,13 +31,16 @@
   }
 </style>
 
-<h1>URL Workspaces</h1>
-
 <svelte:head>
   <title>URL Workspaces</title>
 </svelte:head>
+
+<div class="root">
+<h1>URL Workspaces</h1>
+
 <AppContent class="app-content">
   {#if isLoaded}
     <WorkspacesManager {workspaces} />
   {/if}
 </AppContent>
+</div>
