@@ -1,8 +1,8 @@
 <script>
-  import AddItem from "./add-item.svelte";
   import Drawer, { Content } from "@smui/drawer";
   import List, { Item, Text } from "@smui/list";
   import { createEventDispatcher } from "svelte";
+  import AddItem from "./add-item.svelte";
 
   const dispatch = createEventDispatcher();
   export let workspaces;

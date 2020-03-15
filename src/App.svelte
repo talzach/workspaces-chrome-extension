@@ -14,12 +14,24 @@
   }
 </script>
 
+<style>
+  :global(.app-content) {
+    flex: auto;
+    overflow: auto;
+    position: relative;
+    flex-grow: 1;
+  }
+
+  :global(.mdc-drawer) {
+      height: auto;
+  }
+</style>
+
 <h1>URL Workspaces</h1>
 
 <svelte:head>
   <title>URL Workspaces</title>
 </svelte:head>
-
 <AppContent class="app-content">
   {#if isLoaded}
     <WorkspacesManager {workspaces} />
