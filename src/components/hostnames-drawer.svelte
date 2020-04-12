@@ -1,29 +1,32 @@
-<div class="url-list">
-  {#if selectedWorkspace}
-    {#if selectedWorkspace.hostnames.length}
-      <List nonInteractive>
-        {#each selectedWorkspace.hostnames as hostname}
-          <Item>
-            <div class="item">
-              <Text>{hostname}</Text>
-              <span class="delete-button-wrapper">
-                <Button class="delete-button" 
-                        on:click={() =>  { activeHostname = hostname; deleteHostnameDialog.open()} }>
-                  <i class="material-icons">clear</i>
-                </Button>
-              </span>
-            </div>
-          </Item>
-        {/each}
-      </List>
-    {:else}
-      <div class="empty-state">Nothing here yet... Add an URL address</div>
-    {/if}
+
+{#if selectedWorkspace}
+  {#if selectedWorkspace.hostnames.length}
+    <div class="url-list">
+          <List nonInteractive>
+            {#each selectedWorkspace.hostnames as hostname}
+              <Item>
+                <div class="item">
+                  <Text>{hostname}</Text>
+                  <span class="hover-icon-button-wrapper">
+                    <Button class="hover-icon-button" 
+                            on:click={() =>  { activeHostname = hostname; deleteHostnameDialog.open()} }>
+                      <i class="material-icons">clear</i>
+                    </Button>
+                  </span>
+                </div>
+              </Item>
+            {/each}
+          </List>
+    </div>
+  {:else}
+    <div class="empty-state">Nothing here yet... Add URL addresses</div>
   {/if}
-</div>
-<br />
-<div class="add-item-container">
-  <AddItem type="url" label="URL" on:newItem={addUrl} />
+{/if}
+<div>
+  <Separator nav />
+  <div class="add-item-container">
+    <AddItem type="url" label="URL" on:newItem={addUrl} />
+  </div>
 </div>
 
 <Dialog bind:this={deleteHostnameDialog} 
@@ -45,7 +48,7 @@
 </Dialog>
 
 <script>
-  import List, { Item, Text } from "@smui/list";
+  import List, { Item, Text, Separator } from "@smui/list";
   import { createEventDispatcher } from "svelte";
   import AddItem from "./add-item.svelte";
   import Button, {Label} from '@smui/button';
@@ -80,9 +83,7 @@
 <style>
   .url-list {
     overflow: auto;
-    height: 350px;
-    text-align: center;
-    margin: auto 0;
+    /* height: 350px; */
   }
   .add-item-container {
     width: 100%;
@@ -92,17 +93,19 @@
   .empty-state {
     color: lightgray;
     font-size: 30px;
+    margin: auto 0;
+    text-align: center;
   }
   .item {
     width: 100%;
     display: flex;
     line-height: 41px;
   }
-	.delete-button-wrapper {
+	.hover-icon-button-wrapper {
 		opacity: 0;
     margin-left: 5px;
 	}
-	.item:hover .delete-button-wrapper {
+	.item:hover .hover-icon-button-wrapper {
 		opacity: 1;
     margin-right: -7px;
 	}

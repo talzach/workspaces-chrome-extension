@@ -8,11 +8,18 @@
       <List>
         {#each workspaces as workspace}
           <Item on:click={selectWorkspace(workspace)} 
-                activated={workspace == activeWorkspace}>
+                activated={workspace.name == selectedWorkspaceName}>
             <div class="item">
               <Text>{workspace.name}</Text>
-              <span class="delete-button-wrapper">
-                <Button class="delete-button" on:click={() => deleteWorkspaceDialog.open()}>
+              <span class="hover-icon-button-wrapper">
+                <Button class="hover-icon-button" on:click={
+                  () => {
+                    renamedWorkspaceName = workspace.name; 
+                    renameWorkspaceDialog.open();
+                  }}>
+                  <i class="material-icons">edit</i>
+                </Button>
+                <Button class="hover-icon-button" on:click={() => deleteWorkspaceDialog.open()}>
                   <i class="material-icons">clear</i>
                 </Button>
               </span>
@@ -20,9 +27,11 @@
           </Item>
         {/each}
       </List>
-      <br />
-      <div class="add-item-container">
-        <AddItem label="New Workspace" type="text" on:newItem={addWorkspace} />
+      <div>
+        <Separator nav />
+        <div class="add-item-container">
+          <AddItem label="New Workspace" type="text" on:newItem={addWorkspace} />
+        </div>
       </div>
     </div>
   </Content>
@@ -30,17 +39,34 @@
 
 <Dialog bind:this={deleteWorkspaceDialog} 
         aria-labelledby="event-title" 
-        aria-describedby="event-content" 
-        on:MDCDialog:closed={deleteWorkspaceHandler}>
-  <DialogTitle id="event-title">Delete {activeWorkspace.name} Workspace</DialogTitle>
+        aria-describedby="event-content">
+  <DialogTitle id="event-title">Delete {selectedWorkspaceName} Workspace</DialogTitle>
   <DialogContent id="event-content">
     Are you sure you want to delete this workspace with everything within it?
   </DialogContent>
   <Actions>
-    <Button action="delete">
+    <Button on:click={() => deleteWorkspace()}>
       <Label>Delete</Label>
     </Button>
-    <Button action="cancel" default use={[InitialFocus]}>
+    <Button default use={[InitialFocus]}>
+      <Label>Cancel</Label>
+    </Button>
+  </Actions>
+</Dialog>
+
+<Dialog bind:this={renameWorkspaceDialog} 
+        aria-labelledby="event-title" 
+        aria-describedby="event-content">
+  <DialogTitle id="event-title">Rename Workspace</DialogTitle>
+  <DialogContent id="event-content">
+    Enter a new workspace name
+    <input type="text" bind:value={renamedWorkspaceName}/>
+  </DialogContent>
+  <Actions>
+    <Button on:click={() => renameWorkspace()}>
+      <Label>Rename</Label>
+    </Button>
+    <Button autofocus>
       <Label>Cancel</Label>
     </Button>
   </Actions>
@@ -48,7 +74,7 @@
 
 <script>
   import Drawer, { Content, Header, Title, Subtitle } from "@smui/drawer";
-  import List, { Item, Text } from "@smui/list";
+  import List, { Item, Text, Separator } from "@smui/list";
   import { createEventDispatcher } from "svelte";
   import AddItem from "./add-item.svelte";
   import IconButton from "@smui/icon-button";
@@ -62,31 +88,29 @@
   
   const dispatch = createEventDispatcher();
   export let workspaces;
-  let activeWorkspace = workspaces[0];
+  export let selectedWorkspaceName;
   let deleteWorkspaceDialog;
+  let renameWorkspaceDialog;
+  let renamedWorkspaceName;
 
   function addWorkspace(event) {
     dispatch("addWorkspace", event.detail);
   }
 
-  function deleteWorkspace(workspace) {
-    dispatch("deleteWorkspace", workspace.name);
+  function deleteWorkspace() {
+    dispatch("deleteWorkspace", selectedWorkspaceName);
+  }
+
+  function renameWorkspace() {
+    dispatch("renameWorkspace", { 
+      oldName: selectedWorkspaceName, 
+      newName: renamedWorkspaceName
+    });
   }
 
   function selectWorkspace(workspace) {
-    activeWorkspace = workspace;
+    selectedWorkspaceName = workspace.name;
     dispatch("selectWorkspace", workspace);
-  }
-  
-  function deleteWorkspaceHandler(e) {
-    switch (e.detail.action) {
-      case 'delete':
-        deleteWorkspace(activeWorkspace);
-        break;
-      case 'cancel':
-      default:
-        break;
-    }
   }
 </script>
 
@@ -111,10 +135,11 @@
     justify-content: space-between;
     line-height: 37px;
   }
-	.delete-button-wrapper {
+	.hover-icon-button-wrapper {
 		opacity: 0;
+    display: flex;
 	}
-	.item:hover .delete-button-wrapper {
+	.item:hover .hover-icon-button-wrapper {
 		opacity: 1;
     margin-right: -7px;
 	}

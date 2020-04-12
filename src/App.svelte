@@ -17,6 +17,7 @@
 <style>
   :global(.root) {
     margin: 20px;
+    height: 90%;
   }
 
   :global(.app-content) {
@@ -24,16 +25,18 @@
     overflow: auto;
     position: relative;
     flex-grow: 1;
+    height: 100%;
   }
 
   :global(.mdc-drawer) {
       height: auto;
   }
 
-  :global(.delete-button) {
+  :global(.hover-icon-button) {
       min-width: 10px;
       min-height: 38px;
       margin: 0;
+      padding: 2px;
   }
 </style>
 

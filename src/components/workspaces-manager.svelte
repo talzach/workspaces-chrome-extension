@@ -1,8 +1,10 @@
 <div class="drawer-container">
   <WorkspacesDrawer
     {workspaces}
+    selectedWorkspaceName={selectedWorkspace.name}
     on:addWorkspace={addWorkspace}
     on:deleteWorkspace={deleteWorkspace}
+    on:renameWorkspace={renameWorkspace}
     on:selectWorkspace={selectWorkspace} />
 
   <main class="main-content">
@@ -23,15 +25,32 @@
   export let workspaces = [];
   let [selectedWorkspace] = workspaces;
 
-  function addWorkspace(event) {
-    const createdWorkspace = createWorkspace(event.detail);
-    workspaces = [...workspaces, createdWorkspace];
+  function selectWorkspace({ detail: selected }) {
+    selectedWorkspace = selected;
+  }
+
+  function addWorkspace({ detail: workspaceToAdd }) {
+    const createdWorkspace = createWorkspace(workspaceToAdd);
+    workspaces = [ ...workspaces, createdWorkspace ];
     saveWorkspacesToStorage(workspaces);
     selectedWorkspace = createdWorkspace;
   }
 
-  function deleteWorkspace(event) {
-    workspaces = workspaces.filter(x => x.name != event.detail);
+  function deleteWorkspace({ detail: workspaceToDelete }) {
+    workspaces = workspaces.filter(x => x.name != workspaceToDelete);
+    saveWorkspacesToStorage(workspaces);
+  }
+  
+  function renameWorkspace({ detail: { oldName, newName } }) {
+    workspaces = workspaces.map(workspace => {
+      if (workspace.name == oldName) {
+        return {
+          ...workspace,
+          name: newName
+        };
+      } else 
+        return workspace;
+    });
     saveWorkspacesToStorage(workspaces);
   }
   
@@ -53,14 +72,6 @@
     ];
     saveWorkspacesToStorage(workspaces);
   }
-
-  function selectWorkspace(event) {
-    selectedWorkspace = event.detail;
-  }
-
-  function saveWorkpaces(event) {
-    saveWorkspacesToStorage(workspaces);
-  }
 </script>
 
 <style>
@@ -70,6 +81,7 @@
     border: 1px solid rgba(0, 0, 0, 0.1);
     overflow: hidden;
     z-index: 0;
+    min-height: 99.8%;
   }
   .main-content {
     padding: 16px;
