@@ -38,10 +38,10 @@
 </Drawer>
 
 <Dialog bind:this={deleteWorkspaceDialog} 
-        aria-labelledby="event-title" 
-        aria-describedby="event-content">
-  <DialogTitle id="event-title">Delete {selectedWorkspaceName} Workspace</DialogTitle>
-  <DialogContent id="event-content">
+        aria-labelledby="delete-title" 
+        aria-describedby="delete-content">
+  <DialogTitle id="delete-title">Delete {selectedWorkspaceName} Workspace</DialogTitle>
+  <DialogContent id="delete-content">
     Are you sure you want to delete this workspace with everything within it?
   </DialogContent>
   <Actions>
@@ -55,18 +55,18 @@
 </Dialog>
 
 <Dialog bind:this={renameWorkspaceDialog} 
-        aria-labelledby="event-title" 
-        aria-describedby="event-content">
-  <DialogTitle id="event-title">Rename Workspace</DialogTitle>
-  <DialogContent id="event-content">
+        aria-labelledby="rename-title" 
+        aria-describedby="rename-content">
+  <DialogTitle id="rename-title">Rename Workspace</DialogTitle>
+  <DialogContent id="rename-content">
     Enter a new workspace name
-    <input type="text" bind:value={renamedWorkspaceName}/>
+    <input type="text" bind:value={renamedWorkspaceName} use={[InitialFocus]} />
   </DialogContent>
   <Actions>
-    <Button on:click={() => renameWorkspace()}>
+    <Button on:click={() => renameWorkspace()} default>
       <Label>Rename</Label>
     </Button>
-    <Button autofocus>
+    <Button>
       <Label>Cancel</Label>
     </Button>
   </Actions>
