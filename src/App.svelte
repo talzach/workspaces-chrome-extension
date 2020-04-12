@@ -29,6 +29,12 @@
   :global(.mdc-drawer) {
       height: auto;
   }
+
+  :global(.delete-button) {
+      min-width: 10px;
+      min-height: 38px;
+      margin: 0;
+  }
 </style>
 
 <svelte:head>

@@ -1,5 +1,16 @@
+<div class="drawer-container">
+  <WorkspacesDrawer
+    {workspaces}
+    on:addWorkspace={addWorkspace}
+    on:deleteWorkspace={deleteWorkspace}
+    on:selectWorkspace={selectWorkspace} />
+
+  <main class="main-content">
+    <HostnamesDrawer {selectedWorkspace} on:saveWorkpaces={saveWorkpaces} />
+  </main>
+</div>
+
 <script>
-  import AddItem from "./add-item.svelte";
   import WorkspacesDrawer from "./workspaces-drawer.svelte";
   import HostnamesDrawer from "./hostnames-drawer.svelte";
   import {
@@ -17,11 +28,16 @@
     selectedWorkspace = createdWorkspace;
   }
 
+  function deleteWorkspace(event) {
+    workspaces = workspaces.filter(x => x.name != event.detail);
+    saveWorkspacesToStorage(workspaces);
+  }
+
   function selectWorkspace(event) {
     selectedWorkspace = event.detail;
   }
 
-  function addUrl(event) {
+  function saveWorkpaces(event) {
     saveWorkspacesToStorage(workspaces);
   }
 </script>
@@ -43,14 +59,3 @@
     justify-content: space-between;
   }
 </style>
-
-<div class="drawer-container">
-  <WorkspacesDrawer
-    {workspaces}
-    on:addWorkspace={addWorkspace}
-    on:selectWorkspace={selectWorkspace} />
-
-  <main class="main-content">
-    <HostnamesDrawer {selectedWorkspace} on:addUrl={addUrl} />
-  </main>
-</div>
