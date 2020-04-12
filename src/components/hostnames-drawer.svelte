@@ -62,20 +62,13 @@
   let activeHostname;
   
   function addUrl(event) {
-    selectedWorkspace.hostnames = [
-      ...selectedWorkspace.hostnames,
-      event.detail
-    ];
-    dispatch("saveWorkpaces");
+    dispatch("addUrl", event.detail);
   }
   
   function deleteHostnameHandler(e) {
     switch (e.detail.action) {
       case 'delete':
-        selectedWorkspace.hostnames = [
-          ...selectedWorkspace.hostnames.filter(x => x != activeHostname),
-        ];
-        dispatch("saveWorkpaces");
+        dispatch("deleteUrl", activeHostname);
         break;
       case 'cancel':
       default:

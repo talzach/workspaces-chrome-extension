@@ -6,7 +6,9 @@
     on:selectWorkspace={selectWorkspace} />
 
   <main class="main-content">
-    <HostnamesDrawer {selectedWorkspace} on:saveWorkpaces={saveWorkpaces} />
+    <HostnamesDrawer {selectedWorkspace} 
+        on:addUrl={addUrl}
+        on:deleteUrl={deleteUrl} />
   </main>
 </div>
 
@@ -30,6 +32,25 @@
 
   function deleteWorkspace(event) {
     workspaces = workspaces.filter(x => x.name != event.detail);
+    saveWorkspacesToStorage(workspaces);
+  }
+  
+  function addUrl(event) {
+    const newUrl = event.detail;
+    if (!selectedWorkspace.hostnames.includes(newUrl)) {
+      selectedWorkspace.hostnames = [
+        ...selectedWorkspace.hostnames,
+        newUrl
+      ];
+      saveWorkspacesToStorage(workspaces);
+    }
+  }
+
+  function deleteUrl(event) {
+    const urlToDelete = event.detail;
+    selectedWorkspace.hostnames = [
+      ...selectedWorkspace.hostnames.filter(x => x != urlToDelete),
+    ];
     saveWorkspacesToStorage(workspaces);
   }
 
