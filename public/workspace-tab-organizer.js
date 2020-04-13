@@ -1,53 +1,87 @@
+async function moveTabToWorkspace(newTab) {
+  let workspaces = await getWorkspacesFromStorage();
+  let matchingWorkspace = workspaces.find((userWorkspace) =>
+    isUrlContainsOneOfWorkspaceUrls(newTab.pendingUrl, userWorkspace)
+  );
 
-const userWorkspaces = [
-    {
-        name: 'DevChrome',
-        windowId: NaN,
-        urls: [
-            'developer.chrome.com',
-            // 'https://developer.chrome.com'
-        ]
-    },
-];
-
-function moveTabToWorkspace(newTab) {
-    var newTabHostname = getUrlHostname(newTab.pendingUrl);
-    const matchingWorkspace = userWorkspaces.find(userWorkspace => userWorkspace.urls.includes(newTabHostname));
-    
-    if (matchingWorkspace) {
-        moveTabToMatchingWorkspaceWindow(newTab, matchingWorkspace);
-    }
+  if (matchingWorkspace) {
+    console.log(
+      `found matching workspace
+        for tab ${newTab.pendingUrl} - matching workspace: ${matchingWorkspace.name}.
+        moving tab to the new workpsace`
+    );
+    matchingWorkspace = await moveTabToMatchingWorkspaceWindow(
+      newTab,
+      matchingWorkspace
+      );
+    workspaces = getUpdatedWorkspaces(workspaces, matchingWorkspace);
+    saveWorkspacesToStorage(workspaces);
+  }
 }
 
-function getUrlHostname(url) {
-    return (new URL(url)).hostname;
+function getUpdatedWorkspaces(workspaces, workspaceToUpdate) {
+    return workspaces.map((workspace) => {
+        if (workspace.name == workspaceToUpdate.name) {
+          return workspaceToUpdate;
+        } else return workspace;
+    });
+}
+
+function isUrlContainsOneOfWorkspaceUrls(url, workspace) {
+  return !!workspace.urls.find((workspaceUrl) => url.includes(workspaceUrl));
+}
+
+async function getWorkspacesFromStorage() {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(['workspaces'], (result) => {
+      console.debug('get workspaces', result.workspaces);
+      resolve(result.workspaces);
+    });
+  });
+}
+
+function saveWorkspacesToStorage(workspaces) {
+  chrome.storage.sync.set({ workspaces }, () => {
+    console.debug('workspaces saved', workspaces);
+  });
 }
 
 async function moveTabToMatchingWorkspaceWindow(newTab, matchingWorkspace) {
-    if (await isWindowExists(matchingWorkspace.windowId)) {
-        moveTabToExistingWindow(newTab, matchingWorkspace.windowId);
-    } else {
-        moveTabToNewWindow(matchingWorkspace, newTab);
-    }
+  console.debug('matchingWorkspace', matchingWorkspace);
+  console.debug('matchingWorkspace id', matchingWorkspace['windowId']);
+  if (await isWindowExists(matchingWorkspace.windowId)) {
+    moveTabToExistingWindow(newTab, matchingWorkspace.windowId);
+    return matchingWorkspace;
+  } else {
+    const newWindow = await createWindow(newTab.id);
+    return getWorkspaceWithNewWindow(matchingWorkspace, newWindow);
+  }
+}
+
+function getWorkspaceWithNewWindow(matchingWorkspace, newWindow) {
+  return {
+    ...matchingWorkspace,
+    windowId: newWindow.id,
+  };
 }
 
 async function moveTabToExistingWindow(createdTab, windowId) {
-    focusWindow(windowId);
-    const movedTab = await moveTab(createdTab.id, windowId);
-    highlightTab(windowId, movedTab);
-}
-
-async function moveTabToNewWindow(matchingWorkspace, newTab) {
-    const newWindow = await createWindow(newTab.id);
-    matchingWorkspace.windowId = newWindow.id;
+  focusWindow(windowId);
+  const movedTab = await moveTab(createdTab.id, windowId);
+  highlightTab(windowId, movedTab);
 }
 
 async function isWindowExists(id) {
-    try {
-        const window = await getWindow(id);
-        return id ? Boolean(window) : false;
-    } catch (error) {
-        console.log(error);
-        return false;
-    }
+  if (!id) {
+    console.debug('no window id for workspace');
+    return false;
+  }
+
+  try {
+    const window = await getWindow(id);
+    return id ? Boolean(window) : false;
+  } catch (error) {
+    console.debug(error);
+    return false;
+  }
 }

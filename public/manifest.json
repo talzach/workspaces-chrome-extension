@@ -12,7 +12,10 @@
         "storage"
     ],
     "background": {
-        "scripts": ["background.js", "workspace-tab-organizer.js"],
+        "scripts": [
+            "background.js",
+            "workspace-tab-organizer.js"
+        ],
         "persistent": false
     },
     "options_ui": {
