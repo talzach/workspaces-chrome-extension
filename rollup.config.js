@@ -10,11 +10,10 @@ const production = !process.env.ROLLUP_WATCH;
 export default {
 	input: 'src/main.js',
 	output: {
-		sourcemap: true,
+		name: 'workspaces',
+		file: 'public/build/bundle.js',
 		format: 'iife',
-		sourcemap: 'inline',
-		name: 'app',
-		file: 'public/build/bundle.js'
+		sourcemap: 'inline'
 	},
 	plugins: [
 		svelte({

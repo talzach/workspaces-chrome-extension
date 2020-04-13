@@ -3,7 +3,7 @@ const userWorkspaces = [
     {
         name: 'DevChrome',
         windowId: NaN,
-        hostnames: [
+        urls: [
             'developer.chrome.com',
             // 'https://developer.chrome.com'
         ]
@@ -12,7 +12,7 @@ const userWorkspaces = [
 
 function moveTabToWorkspace(newTab) {
     var newTabHostname = getUrlHostname(newTab.pendingUrl);
-    const matchingWorkspace = userWorkspaces.find(userWorkspace => userWorkspace.hostnames.includes(newTabHostname));
+    const matchingWorkspace = userWorkspaces.find(userWorkspace => userWorkspace.urls.includes(newTabHostname));
     
     if (matchingWorkspace) {
         moveTabToMatchingWorkspaceWindow(newTab, matchingWorkspace);

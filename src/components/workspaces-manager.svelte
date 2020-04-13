@@ -1,14 +1,14 @@
-<div class="drawer-container">
+<div class="drawers-container">
   <WorkspacesDrawer
     {workspaces}
-    selectedWorkspaceName={selectedWorkspace.name}
+    selectedWorkspaceName={selectedWorkspace ? selectedWorkspace.name : null}
     on:addWorkspace={addWorkspace}
     on:deleteWorkspace={deleteWorkspace}
     on:renameWorkspace={renameWorkspace}
     on:selectWorkspace={selectWorkspace} />
 
-  <main class="main-content">
-    <HostnamesDrawer {selectedWorkspace} 
+  <main class="url-drawer-container">
+    <UrlsDrawer {selectedWorkspace} 
         on:addUrl={addUrl}
         on:deleteUrl={deleteUrl} />
   </main>
@@ -16,14 +16,19 @@
 
 <script>
   import WorkspacesDrawer from "./workspaces-drawer.svelte";
-  import HostnamesDrawer from "./hostnames-drawer.svelte";
+  import UrlsDrawer from "./urls-drawer.svelte";
   import {
     saveWorkspacesToStorage,
     createWorkspace
   } from "../workspaces-service.js";
 
   export let workspaces = [];
-  let [selectedWorkspace] = workspaces;
+  let selectedWorkspace = getFirstWorkspace(workspaces);
+
+  function getFirstWorkspace(workspaces) {
+    const [first] = workspaces;
+    return first;
+  }
 
   function selectWorkspace({ detail: selected }) {
     selectedWorkspace = selected;
@@ -36,8 +41,13 @@
     selectedWorkspace = createdWorkspace;
   }
 
-  function deleteWorkspace({ detail: workspaceToDelete }) {
-    workspaces = workspaces.filter(x => x.name != workspaceToDelete);
+  function deleteWorkspace({ detail: workspaceNameToDelete }) {
+    workspaces = workspaces.filter(x => x.name != workspaceNameToDelete);
+
+    if (selectedWorkspace.name == workspaceNameToDelete) {
+      selectedWorkspace = getFirstWorkspace(workspaces);
+    }
+
     saveWorkspacesToStorage(workspaces);
   }
   
@@ -56,9 +66,9 @@
   
   function addUrl(event) {
     const newUrl = event.detail;
-    if (!selectedWorkspace.hostnames.includes(newUrl)) {
-      selectedWorkspace.hostnames = [
-        ...selectedWorkspace.hostnames,
+    if (!selectedWorkspace.urls.includes(newUrl)) {
+      selectedWorkspace.urls = [
+        ...selectedWorkspace.urls,
         newUrl
       ];
       saveWorkspacesToStorage(workspaces);
@@ -67,15 +77,15 @@
 
   function deleteUrl(event) {
     const urlToDelete = event.detail;
-    selectedWorkspace.hostnames = [
-      ...selectedWorkspace.hostnames.filter(x => x != urlToDelete),
+    selectedWorkspace.urls = [
+      ...selectedWorkspace.urls.filter(x => x != urlToDelete),
     ];
     saveWorkspacesToStorage(workspaces);
   }
 </script>
 
 <style>
-  .drawer-container {
+  .drawers-container {
     position: relative;
     display: flex;
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -83,7 +93,7 @@
     z-index: 0;
     height: 100%;
   }
-  .main-content {
+  .url-drawer-container {
     padding: 16px;
     width: 100%;
     display: flex;

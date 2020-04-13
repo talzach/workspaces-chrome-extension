@@ -22,7 +22,7 @@ export function saveWorkspacesToStorage(workspaces) {
 }
 
 export function createWorkspace(name) {
-  return { name, hostnames: [] };
+  return { name, urls: [] };
 }
 
 function getDummyWorkspaces() {
@@ -30,7 +30,7 @@ function getDummyWorkspaces() {
     {
       name: 'DevChrome',
       windowId: NaN,
-      hostnames: [
+      urls: [
         'developer.chrome.com'
         // 'https://developer.chrome.com'
       ]
@@ -38,7 +38,7 @@ function getDummyWorkspaces() {
     {
       name: 'Tal',
       windowId: NaN,
-      hostnames: [
+      urls: [
         'Tal.chrome.Tal'
         // 'https://developer.chrome.com'
       ]
