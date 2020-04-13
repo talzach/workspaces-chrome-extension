@@ -1,3 +1,19 @@
+<svelte:head>
+  <title>Workspaces</title>
+</svelte:head>
+
+<div class="root">
+  <div>
+    <img src="./images/workspaces-logo-purple.png" alt="Workspaces" class="logo">
+  </div>
+
+  <AppContent class="app-content">
+    {#if isLoaded}
+      <WorkspacesManager {workspaces} />
+    {/if}
+  </AppContent>
+</div>
+
 <script>
   import WorkspacesManager from "./components/workspaces-manager.svelte";
   import Drawer, { AppContent } from "@smui/drawer";
@@ -17,43 +33,27 @@
 <style>
   .root {
     padding: 20px;
-    height: 96%;
+    height: 90%;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
   }
-
   :global(.app-content) {
     height: 100%;
   }
-
   :global(.mdc-drawer) {
       height: auto;
   }
-
   :global(.hover-icon-button) {
       min-width: 10px;
       min-height: 38px;
       margin: 0;
       padding: 2px;
   }
-
-  h1 {
-    padding: 0 10px 10px 10px;
+  .logo {
+    max-width: 100%; 
+    height: 70px;
+    padding: 0 10px 10px 0;
     margin: 0;
   }
 </style>
-
-<svelte:head>
-  <title>URL Workspaces</title>
-</svelte:head>
-
-<div class="root">
-  <h1>URL Workspaces</h1>
-
-  <AppContent class="app-content">
-    {#if isLoaded}
-      <WorkspacesManager {workspaces} />
-    {/if}
-  </AppContent>
-</div>

@@ -83,7 +83,6 @@
 <style>
   .url-list {
     overflow: auto;
-    /* height: 350px; */
   }
   .add-item-container {
     width: 100%;
