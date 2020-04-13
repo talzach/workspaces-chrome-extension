@@ -2,21 +2,21 @@
 {#if selectedWorkspace}
   {#if selectedWorkspace.hostnames.length}
     <div class="url-list">
-          <List nonInteractive>
-            {#each selectedWorkspace.hostnames as hostname}
-              <Item>
-                <div class="item">
-                  <Text>{hostname}</Text>
-                  <span class="hover-icon-button-wrapper">
-                    <Button class="hover-icon-button" 
-                            on:click={() =>  { activeHostname = hostname; deleteHostnameDialog.open()} }>
-                      <i class="material-icons">clear</i>
-                    </Button>
-                  </span>
-                </div>
-              </Item>
-            {/each}
-          </List>
+        <List>
+          {#each selectedWorkspace.hostnames as hostname}
+            <Item>
+              <div class="item">
+                <Text>{hostname}</Text>
+                <span class="hover-icon-button-wrapper">
+                  <Button class="hover-icon-button" 
+                          on:click={() =>  { activeHostname = hostname; deleteHostnameDialog.open()} }>
+                    <i class="material-icons">clear</i>
+                  </Button>
+                </span>
+              </div>
+            </Item>
+          {/each}
+        </List>
     </div>
   {:else}
     <div class="empty-state">Nothing here yet... Add URL addresses</div>
@@ -25,7 +25,7 @@
 <div>
   <Separator nav />
   <div class="add-item-container">
-    <AddItem type="url" label="URL" on:newItem={addUrl} />
+    <AddItem type="url" label="New URL" on:newItem={addUrl} />
   </div>
 </div>
 
@@ -103,7 +103,7 @@
   }
 	.hover-icon-button-wrapper {
 		opacity: 0;
-    margin-left: 5px;
+    margin-left: 10px;
 	}
 	.item:hover .hover-icon-button-wrapper {
 		opacity: 1;

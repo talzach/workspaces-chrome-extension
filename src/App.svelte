@@ -15,16 +15,15 @@
 </script>
 
 <style>
-  :global(.root) {
-    margin: 20px;
-    height: 90%;
+  .root {
+    padding: 20px;
+    height: 96%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
   }
 
   :global(.app-content) {
-    flex: auto;
-    overflow: auto;
-    position: relative;
-    flex-grow: 1;
     height: 100%;
   }
 
@@ -38,6 +37,11 @@
       margin: 0;
       padding: 2px;
   }
+
+  h1 {
+    padding: 0 10px 10px 10px;
+    margin: 0;
+  }
 </style>
 
 <svelte:head>
@@ -45,11 +49,11 @@
 </svelte:head>
 
 <div class="root">
-<h1>URL Workspaces</h1>
+  <h1>URL Workspaces</h1>
 
-<AppContent class="app-content">
-  {#if isLoaded}
-    <WorkspacesManager {workspaces} />
-  {/if}
-</AppContent>
+  <AppContent class="app-content">
+    {#if isLoaded}
+      <WorkspacesManager {workspaces} />
+    {/if}
+  </AppContent>
 </div>

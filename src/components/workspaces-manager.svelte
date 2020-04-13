@@ -81,12 +81,11 @@
     border: 1px solid rgba(0, 0, 0, 0.1);
     overflow: hidden;
     z-index: 0;
-    min-height: 99.8%;
+    height: 100%;
   }
   .main-content {
     padding: 16px;
     width: 100%;
-    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
