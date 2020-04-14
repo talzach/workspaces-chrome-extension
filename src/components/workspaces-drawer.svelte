@@ -1,7 +1,7 @@
 <Drawer>
   <Header>
-    <Title>Workspaces</Title>
-    <Subtitle>Select or add your workspace</Subtitle>
+    <Title>Your Workspaces</Title>
+    <Subtitle>Select or add workspaces</Subtitle>
   </Header>
   <Content>
     <div class="drawer-content">

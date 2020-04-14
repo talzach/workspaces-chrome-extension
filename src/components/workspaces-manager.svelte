@@ -95,9 +95,6 @@
   }
   .url-drawer-container {
     padding: 16px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    width: calc(100% - 288px);
   }
 </style>

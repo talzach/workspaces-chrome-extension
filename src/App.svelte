@@ -14,6 +14,7 @@
   </AppContent>
 </div>
 
+
 <script>
   import WorkspacesManager from "./components/workspaces-manager.svelte";
   import Drawer, { AppContent } from "@smui/drawer";
@@ -33,7 +34,7 @@
 <style>
   .root {
     padding: 20px;
-    height: 90%;
+    height: 94%;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -52,7 +53,7 @@
   }
   .logo {
     max-width: 100%; 
-    height: 70px;
+    height: 50px;
     padding: 0 10px 10px 0;
     margin: 0;
   }

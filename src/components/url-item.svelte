@@ -1,14 +1,15 @@
 <Item>
     <div class="item">
-    <Text>{url}</Text>
-    <span class="hover-icon-button-wrapper">
-        <Button class="hover-icon-button" 
-                on:click={() =>  deleteUrlDialog.open() }>
-        <i class="material-icons">clear</i>
-        </Button>
-    </span>
+        <Text>{url}</Text>
+        <span class="hover-icon-button-wrapper">
+            <Button class="hover-icon-button" 
+                    on:click={() =>  deleteUrlDialog.open() }>
+            <i class="material-icons">clear</i>
+            </Button>
+        </span>
     </div>
 </Item>
+<Separator />
 
 <Dialog bind:this={deleteUrlDialog} 
         aria-labelledby="event-title" 
@@ -58,6 +59,7 @@
     .item {
         width: 100%;
         display: flex;
+        justify-content: space-between;
         line-height: 41px;
     }
 	.hover-icon-button-wrapper {
