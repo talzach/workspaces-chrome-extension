@@ -1,5 +1,6 @@
 <Item>
     <div class="item">
+        <img src="https://www.google.com/s2/favicons?domain={getUrlOrigin(url)}" alt="Google" width="16" height="16" class="icon"/>
         <Text>{url}</Text>
         <span class="hover-icon-button-wrapper">
             <Button class="hover-icon-button" 
@@ -43,6 +44,10 @@
     export let url;
     const dispatch = createEventDispatcher();
     let deleteUrlDialog;
+
+    function getUrlOrigin(url) {
+        return (new URL(url)).origin;
+    }
   
     function deleteUrlHandler(e) {
         switch (e.detail.action) {
@@ -59,15 +64,22 @@
     .item {
         width: 100%;
         display: flex;
-        justify-content: space-between;
         line-height: 41px;
+    }
+    .icon {
+        align-self: center;
+        margin-right: 10px; 
     }
 	.hover-icon-button-wrapper {
 		opacity: 0;
-        margin-left: 10px;
+        margin-left: auto;
 	}
 	.item:hover .hover-icon-button-wrapper {
 		opacity: 1;
         margin-right: -7px;
-	}
+    }
+
+    :global(.item .mdc-list-item__text) {
+        cursor: text;
+    }
 </style>
