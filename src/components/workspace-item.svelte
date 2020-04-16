@@ -57,13 +57,13 @@
 </Dialog>
 
 <script>
-    import { Item, Text, InitialFocus } from "@smui/list";
+    import { Item, Text } from "@smui/list";
     import { createEventDispatcher } from "svelte";
     import IconButton from "@smui/icon-button";
     import Button, {Label} from '@smui/button';
     import Dialog, {
         Actions, 
-        InitialFocus2, 
+        InitialFocus, 
         Content as DialogContent, 
         Title as DialogTitle
     } from '@smui/dialog';
