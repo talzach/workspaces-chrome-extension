@@ -10,6 +10,10 @@ chrome.tabs.onCreated.addListener((newTab) => {
     moveTabToWorkspace(newTab);
 });
 
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    moveTabToWorkspace(tab);
+});
+
 async function createWindow(tabId) {
     return new Promise((resolve) => {
         chrome.windows.create({ tabId }, (window) => resolve(window));
@@ -32,10 +36,25 @@ async function moveTab(tabId, windowId) {
     });
 }
 
-async function getWindow(id) {
+const getWindowParams = { populate: false, windowTypes: ['normal'] };
+
+async function isWindowExists(id) {
+    if (!id) {
+        console.debug('no window id provided');
+        return false;
+    }
+
     return new Promise((resolve) => {
-        chrome.windows.get(id, { windowTypes: ['normal'] }, (window) => {
-            resolve(window);
+        chrome.windows.get(id, getWindowParams, () => {
+            return resolve(chrome.runtime.lastError ? getWindowFailed(id) : true);
         });
     });
+}
+
+function getWindowFailed(id) {
+    console.log(
+        `no existing window with id ${id} was found. window was probably closed`,
+        chrome.runtime.lastError.message
+    );
+    return false;
 }

@@ -16,7 +16,7 @@
     },
     "permissions": ["tabs", "storage"],
     "background": {
-        "scripts": ["background.js", "workspace-tab-organizer.js"],
+        "scripts": ["background.js", "workspaces.js"],
         "persistent": false
     },
     "options_ui": {

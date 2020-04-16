@@ -40,6 +40,9 @@
         display: flex;
         justify-content: space-between;
     }
+    :global(.mdc-drawer__title) {
+        font-weight: 400;
+    }
 </style>
 
 <script>

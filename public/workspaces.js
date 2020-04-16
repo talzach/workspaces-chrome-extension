@@ -1,11 +1,11 @@
-async function moveTabToWorkspace(newTab) {
+async function moveTabToWorkspace(tab) {
     let workspaces = await getWorkspacesFromStorage();
     let matchingWorkspace = workspaces.find((userWorkspace) =>
-        isUrlContainsOneOfWorkspaceUrls(newTab.pendingUrl, userWorkspace)
+        isUrlContainsOneOfWorkspaceUrls(tab.pendingUrl ?? tab.url, userWorkspace)
     );
 
     if (matchingWorkspace) {
-        matchingWorkspace = await moveTabToMatchingWorkspaceWindow(newTab, matchingWorkspace);
+        matchingWorkspace = await moveTabToMatchingWorkspaceWindow(tab, matchingWorkspace);
         workspaces = getUpdatedWorkspaces(workspaces, matchingWorkspace);
         saveWorkspacesToStorage(workspaces);
     }
@@ -62,19 +62,4 @@ async function moveTabToExistingWindow(createdTab, windowId) {
     focusWindow(windowId);
     const movedTab = await moveTab(createdTab.id, windowId);
     highlightTab(windowId, movedTab);
-}
-
-async function isWindowExists(id) {
-    if (!id) {
-        console.debug('no window id for workspace');
-        return false;
-    }
-
-    try {
-        const window = await getWindow(id);
-        return id ? Boolean(window) : false;
-    } catch (error) {
-        console.debug(`no such window id (${id}) - probably window was closed`, error);
-        return false;
-    }
 }
