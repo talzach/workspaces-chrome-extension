@@ -1,11 +1,18 @@
+chrome.runtime.onInstalled.addListener(() => {
+    chrome.runtime.openOptionsPage();
+});
 
-chrome.tabs.onCreated.addListener(function tabCreated(newTab) {
+chrome.browserAction.onClicked.addListener(() => {
+    chrome.runtime.openOptionsPage();
+});
+
+chrome.tabs.onCreated.addListener((newTab) => {
     moveTabToWorkspace(newTab);
 });
 
 async function createWindow(tabId) {
-    return new Promise(resolve => {
-        chrome.windows.create({ tabId }, window => resolve(window));
+    return new Promise((resolve) => {
+        chrome.windows.create({ tabId }, (window) => resolve(window));
     });
 }
 
@@ -18,16 +25,16 @@ function focusWindow(windowId) {
 }
 
 async function moveTab(tabId, windowId) {
-    return new Promise(resolve => {
-        chrome.tabs.move(tabId, { windowId, index: -1 }, movedTab => {
+    return new Promise((resolve) => {
+        chrome.tabs.move(tabId, { windowId, index: -1 }, (movedTab) => {
             resolve(movedTab);
         });
     });
 }
 
 async function getWindow(id) {
-    return new Promise(resolve => {
-        chrome.windows.get(id, { windowTypes: ['normal'] }, window => {
+    return new Promise((resolve) => {
+        chrome.windows.get(id, { windowTypes: ['normal'] }, (window) => {
             resolve(window);
         });
     });
