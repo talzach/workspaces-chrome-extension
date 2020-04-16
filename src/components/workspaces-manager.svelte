@@ -34,11 +34,13 @@
     selectedWorkspace = selected;
   }
 
-  function addWorkspace({ detail: workspaceToAdd }) {
-    const createdWorkspace = createWorkspace(workspaceToAdd);
-    workspaces = [ ...workspaces, createdWorkspace ];
-    saveWorkspacesToStorage(workspaces);
-    selectedWorkspace = createdWorkspace;
+  function addWorkspace({ detail: workspaceNameToAdd }) {
+    if (!workspaces.find(x => x.name == workspaceNameToAdd)) {
+      const createdWorkspace = createWorkspace(workspaceNameToAdd);
+      workspaces = [ ...workspaces, createdWorkspace ];
+      saveWorkspacesToStorage(workspaces);
+      selectedWorkspace = createdWorkspace;
+    }
   }
 
   function deleteWorkspace({ detail: workspaceNameToDelete }) {
