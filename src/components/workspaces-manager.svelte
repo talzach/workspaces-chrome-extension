@@ -52,7 +52,7 @@
             const createdWorkspace = createWorkspace(workspaceNameToAdd);
             workspaces = [...workspaces, createdWorkspace];
             saveWorkspacesToStorage(workspaces);
-            selectedWorkspace = createdWorkspace;
+            selectWorkspace({ detail: createdWorkspace });
         }
     }
 

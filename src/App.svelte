@@ -17,13 +17,14 @@
 <style>
     .root {
         padding: 28px;
-        height: 94%;
+        height: 100%;
+        max-height: 100%;
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
     }
     :global(.app-content) {
-        height: 100%;
+        height: calc(100% - 65px);
         background-color: white;
     }
     :global(.mdc-drawer) {

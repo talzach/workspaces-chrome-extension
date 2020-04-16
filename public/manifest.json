@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Workspaces",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "icons": {
         "16": "images/workspaces-icon-16.png",
         "48": "images/workspaces-icon-48.png",
