@@ -1,13 +1,17 @@
-# workspaces-chrome-extension
+# Workspaces Chrome Extension
 
-Organize your chrome windows by urls - move tabs with same url to the same window
+Organize your chrome windows by urls - move tabs with same url to the same window.
 
 Manage your tabs by grouping tabs from similar domains into a single chrome window.
 When Opening a new URL, chrome default behavior is to open the tab in the last active window.
 In case you organized your tabs in different windows by some correlation, this behavior will mass things up.
 Workspaces lets you configure which URL addresses you want to always open on the same window!
 
-# how to develop
+# Extension Page
+
+https://chrome.google.com/webstore/detail/bmmllgcakilokeeepnmhfggdahlnhpek
+
+# Development
 
 go to chrome://extensions/ in chrome
 turn on developer mode
@@ -16,7 +20,7 @@ npm i
 npm run dev
 refresh the options page every change you make to apply changes
 
-# how to deploy
+# Deployment
 
 upgrade the version field in public\manifest.json
 npm run build
