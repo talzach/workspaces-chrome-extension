@@ -16,9 +16,13 @@
     },
     "permissions": ["tabs", "storage"],
     "background": {
-        "scripts": ["background.js", "workspaces.js"],
+        "scripts": ["background.js", "storage-service.js", "workspaces.js"],
         "persistent": false
     },
+    "content_scripts": [{
+        "matches": ["*://*/*"],
+        "js": ["storage-service.js", "contentScript.js"]
+    }],
     "options_ui": {
         "page": "index.html",
         "open_in_tab": true

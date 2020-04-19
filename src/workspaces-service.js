@@ -1,28 +1,20 @@
-export async function getWorkspacesFromStorage() {
-    return new Promise((resolve) => {
-        if (chrome.storage) {
-            // chrome.storage.sync.clear();
-            chrome.storage.sync.get(['workspaces'], (result) => {
-                resolve(result.workspaces);
-            });
-        } else {
-            resolve(getDummyWorkspaces());
-        }
-    });
-}
-
-export function saveWorkspacesToStorage(workspaces) {
-    if (chrome.storage) {
-        chrome.storage.sync.set({ workspaces }, () => {
-            console.log('workspaces saved');
-        });
-    } else {
-        console.log('dummy workspaces saved');
-    }
-}
+import { getFromStorage, saveToStorage } from './storage-service';
 
 export function createWorkspace(name) {
     return { name, urls: [] };
+}
+
+export async function getWorkspacesFromStorage() {
+    if (chrome.storage) {
+        // chrome.storage.sync.clear();
+        return await getFromStorage('workspaces');
+    } else {
+        return getDummyWorkspaces();
+    }
+}
+
+export function saveWorkspacesToStorage(workspaces) {
+    saveToStorage('workspaces', workspaces);
 }
 
 function getDummyWorkspaces() {

@@ -2,9 +2,13 @@
     <title>Workspaces</title>
 </svelte:head>
 
+<SettingsDialog bind:dialog={settingsDialog} />
 <div class="root">
-    <div>
+    <div class="header">
         <img src="./images/workspaces-logo-purple.png" alt="Workspaces" class="logo" />
+        <IconButton class="large material-icons settings-button" on:click={() => settingsDialog.open()}>
+            settings
+        </IconButton>
     </div>
 
     <AppContent class="app-content">
@@ -36,21 +40,31 @@
         margin: 0;
         padding: 2px;
     }
+    .header {
+        display: flex;
+        justify-content: space-between;
+    }
     .logo {
         max-width: 100%;
         height: 50px;
         padding: 0 10px 10px 0;
         margin: 0;
     }
+    :global(.root .header .settings-button) {
+        color: gray;
+    }
 </style>
 
 <script>
+    import IconButton from '@smui/icon-button';
     import WorkspacesManager from './components/workspaces-manager.svelte';
+    import SettingsDialog from './components/settings.svelte';
     import Drawer, { AppContent } from '@smui/drawer';
     import { getWorkspacesFromStorage } from './workspaces-service.js';
 
     let workspaces = [];
     let isLoaded = false;
+    let settingsDialog;
 
     initialize();
 

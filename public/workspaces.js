@@ -1,14 +1,25 @@
-async function moveTabToWorkspace(tab) {
+async function tryToMoveTabToWorkspace(tab) {
     let workspaces = await getWorkspacesFromStorage();
-    let matchingWorkspace = workspaces.find((userWorkspace) =>
-        isUrlContainsOneOfWorkspaceUrls(tab.pendingUrl ?? tab.url, userWorkspace)
-    );
+    const tabUrl = tab.pendingUrl ?? tab.url;
+    let matchingWorkspace = getMatchingWorkspace(workspaces, tabUrl);
 
     if (matchingWorkspace) {
-        matchingWorkspace = await moveTabToMatchingWorkspaceWindow(tab, matchingWorkspace);
-        workspaces = getUpdatedWorkspaces(workspaces, matchingWorkspace);
-        saveWorkspacesToStorage(workspaces);
+        console.log(`found matching workspace
+            for tab ${tabUrl} - matching workspace: ${matchingWorkspace.name}.
+            moving tab to the matching workspace case he isn't already in it`);
+        matchingWorkspace = await moveTabToMatchingWorkspace(tab, matchingWorkspace, workspaces);
     }
+}
+
+function getMatchingWorkspace(workspaces, tabUrl) {
+    return workspaces.find((userWorkspace) => isUrlContainsOneOfWorkspaceUrls(tabUrl, userWorkspace));
+}
+
+async function moveTabToMatchingWorkspace(tab, matchingWorkspace, workspaces) {
+    matchingWorkspace = await moveTabToMatchingWorkspaceWindow(tab, matchingWorkspace);
+    workspaces = getUpdatedWorkspaces(workspaces, matchingWorkspace);
+    saveWorkspacesToStorage(workspaces);
+    return matchingWorkspace;
 }
 
 function getUpdatedWorkspaces(workspaces, workspaceToUpdate) {
@@ -24,29 +35,24 @@ function isUrlContainsOneOfWorkspaceUrls(url, workspace) {
 }
 
 async function getWorkspacesFromStorage() {
-    return new Promise((resolve) => {
-        chrome.storage.sync.get(['workspaces'], (result) => {
-            resolve(result.workspaces);
-        });
-    });
+    return await getFromStorage('workspaces');
 }
 
 function saveWorkspacesToStorage(workspaces) {
-    chrome.storage.sync.set({ workspaces }, () => {
-        console.debug('workspaces saved', workspaces);
-    });
+    saveToStorage('workspaces', workspaces);
 }
 
-async function moveTabToMatchingWorkspaceWindow(newTab, matchingWorkspace) {
-    console.log(`found matching workspace
-        for tab ${newTab.pendingUrl} - matching workspace: ${matchingWorkspace.name}.
-        moving tab to the new workspace`);
-
+async function moveTabToMatchingWorkspaceWindow(tab, matchingWorkspace) {
     if (await isWindowExists(matchingWorkspace.windowId)) {
-        moveTabToExistingWindow(newTab, matchingWorkspace.windowId);
+        if (tab.windowId == matchingWorkspace.windowId) {
+            console.log('%ctab is already in correct workspace window. doing nothing', 'color: gray');
+        } else {
+            moveTabToExistingWindow(tab, matchingWorkspace.windowId);
+        }
+
         return matchingWorkspace;
     } else {
-        const newWindow = await createWindow(newTab.id);
+        const newWindow = await createWindow(tab.id);
         return getWorkspaceWithNewWindow(matchingWorkspace, newWindow);
     }
 }
@@ -62,4 +68,5 @@ async function moveTabToExistingWindow(createdTab, windowId) {
     focusWindow(windowId);
     const movedTab = await moveTab(createdTab.id, windowId);
     highlightTab(windowId, movedTab);
+    console.log('%ctab was moved to a new workspace window!', 'color: green');
 }
