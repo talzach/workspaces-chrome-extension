@@ -1,4 +1,4 @@
-async function tryToMoveTabToWorkspace(tab) {
+async function tryToMoveTabToWorkspaceWindow(tab) {
     let workspaces = await getWorkspacesFromStorage();
     const tabUrl = tab.pendingUrl ?? tab.url;
     let matchingWorkspace = getMatchingWorkspace(workspaces, tabUrl);
@@ -15,6 +15,10 @@ function getMatchingWorkspace(workspaces, tabUrl) {
     return workspaces.find((userWorkspace) => isUrlContainsOneOfWorkspaceUrls(tabUrl, userWorkspace));
 }
 
+function isUrlContainsOneOfWorkspaceUrls(url, workspace) {
+    return !!workspace.urls.find((workspaceUrl) => url.includes(workspaceUrl));
+}
+
 async function moveTabToMatchingWorkspace(tab, matchingWorkspace, workspaces) {
     matchingWorkspace = await moveTabToMatchingWorkspaceWindow(tab, matchingWorkspace);
     workspaces = getUpdatedWorkspaces(workspaces, matchingWorkspace);
@@ -28,10 +32,6 @@ function getUpdatedWorkspaces(workspaces, workspaceToUpdate) {
             return workspaceToUpdate;
         } else return workspace;
     });
-}
-
-function isUrlContainsOneOfWorkspaceUrls(url, workspace) {
-    return !!workspace.urls.find((workspaceUrl) => url.includes(workspaceUrl));
 }
 
 async function getWorkspacesFromStorage() {
@@ -53,11 +53,11 @@ async function moveTabToMatchingWorkspaceWindow(tab, matchingWorkspace) {
         return matchingWorkspace;
     } else {
         const newWindow = await createWindow(tab.id);
-        return getWorkspaceWithNewWindow(matchingWorkspace, newWindow);
+        return addWindowIdToWorkspace(matchingWorkspace, newWindow);
     }
 }
 
-function getWorkspaceWithNewWindow(matchingWorkspace, newWindow) {
+function addWindowIdToWorkspace(matchingWorkspace, newWindow) {
     return {
         ...matchingWorkspace,
         windowId: newWindow.id,

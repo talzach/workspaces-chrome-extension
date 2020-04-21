@@ -25,7 +25,6 @@
     import IconButton from '@smui/icon-button';
     import Button, { Label } from '@smui/button';
     import Dialog, { Actions, InitialFocus, Content as DialogContent, Title as DialogTitle } from '@smui/dialog';
-    import { getFromStorage, saveToStorage } from '../storage-service';
 
     const CHANGE_TAB_TITLE_SETTING_STORAGE_KEY = 'changeTabTitles';
 

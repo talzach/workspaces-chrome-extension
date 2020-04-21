@@ -9,7 +9,7 @@ chrome.browserAction.onClicked.addListener(() => {
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.url) {
         console.debug('tab url updated');
-        tryToMoveTabToWorkspace(tab);
+        tryToMoveTabToWorkspaceWindow(tab);
     }
 });
 

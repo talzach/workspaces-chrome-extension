@@ -1,5 +1,3 @@
-import { getFromStorage, saveToStorage } from './storage-service';
-
 export function createWorkspace(name) {
     return { name, urls: [] };
 }
