@@ -60,7 +60,6 @@
     import WorkspacesManager from './components/workspaces-manager.svelte';
     import SettingsDialog from './components/settings.svelte';
     import Drawer, { AppContent } from '@smui/drawer';
-    import { getWorkspacesFromStorage } from './workspaces-service.js';
 
     let workspaces = [];
     let isLoaded = false;
@@ -69,7 +68,7 @@
     initialize();
 
     async function initialize() {
-        workspaces = await getWorkspacesFromStorage();
+        workspaces = await storageService.getWorkspaces();
         isLoaded = true;
     }
 </script>

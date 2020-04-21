@@ -30,7 +30,7 @@
 <script>
     import WorkspacesDrawer from './workspace/workspaces-drawer.svelte';
     import UrlsDrawer from './url/urls-drawer.svelte';
-    import { saveWorkspacesToStorage, createWorkspace } from '../workspaces-service.js';
+    import { createWorkspace } from '../workspaces-service.js';
 
     export let workspaces = [];
 
@@ -51,7 +51,7 @@
         if (isWorkspaceAlreadyExists(workspaceNameToAdd)) {
             const createdWorkspace = createWorkspace(workspaceNameToAdd);
             workspaces = [...workspaces, createdWorkspace];
-            saveWorkspacesToStorage(workspaces);
+            storageService.setWorkspaces(workspaces);
             selectWorkspace({ detail: createdWorkspace });
         }
     }
@@ -67,7 +67,7 @@
             selectedWorkspace = getFirstWorkspace(workspaces);
         }
 
-        saveWorkspacesToStorage(workspaces);
+        storageService.setWorkspaces(workspaces);
     }
 
     function renameWorkspace({ detail: { oldName, newName } }) {
@@ -79,20 +79,20 @@
                 };
             } else return workspace;
         });
-        saveWorkspacesToStorage(workspaces);
+        storageService.setWorkspaces(workspaces);
     }
 
     function addUrl(event) {
         const newUrl = event.detail;
         if (!selectedWorkspace.urls.includes(newUrl)) {
             selectedWorkspace.urls = [...selectedWorkspace.urls, newUrl];
-            saveWorkspacesToStorage(workspaces);
+            storageService.setWorkspaces(workspaces);
         }
     }
 
     function deleteUrl(event) {
         const urlToDelete = event.detail;
         selectedWorkspace.urls = [...selectedWorkspace.urls.filter(x => x != urlToDelete)];
-        saveWorkspacesToStorage(workspaces);
+        storageService.setWorkspaces(workspaces);
     }
 </script>

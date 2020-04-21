@@ -1,7 +1,5 @@
-let isAlreadyChangedTitle = false;
-
 (async function tryChangeTabTitle() {
-    const changeTabTitlesSetting = await getFromStorage('changeTabTitles');
+    const changeTabTitlesSetting = await storageService.get('changeTabTitles');
     if (changeTabTitlesSetting == undefined || changeTabTitlesSetting) {
         const matchingWorkspaceName = await getMatchingWorkspace();
 
@@ -11,6 +9,8 @@ let isAlreadyChangedTitle = false;
         }
     }
 })();
+
+let didAlreadyChangedTitle = false;
 
 function changeTabTitle(matchingWorkspaceName) {
     console.debug('found matching workspace! prefixing tab name with' + matchingWorkspaceName);
@@ -27,11 +27,11 @@ function listenToDomTitleChanges(matchingWorkspaceName) {
 }
 
 function onDomTitleChanged(matchingWorkspaceName) {
-    if (!isAlreadyChangedTitle) {
+    if (!didAlreadyChangedTitle) {
         changeTabTitle(matchingWorkspaceName);
     }
 
-    isAlreadyChangedTitle = !isAlreadyChangedTitle;
+    didAlreadyChangedTitle = !didAlreadyChangedTitle;
 }
 
 async function getMatchingWorkspace() {

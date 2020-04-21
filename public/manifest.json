@@ -16,7 +16,7 @@
     },
     "permissions": ["tabs", "storage"],
     "background": {
-        "scripts": ["background.js", "storage-service.js", "workspaces.js"],
+        "scripts": ["background.js", "storage-service.js", "window-api.js", "tab-workspace-matcher.js"],
         "persistent": false
     },
     "content_scripts": [{

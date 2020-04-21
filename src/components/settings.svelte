@@ -35,10 +35,10 @@
     init();
 
     async function init() {
-        changeTabTitles = await getFromStorage(CHANGE_TAB_TITLE_SETTING_STORAGE_KEY);
+        changeTabTitles = await storageService.get(CHANGE_TAB_TITLE_SETTING_STORAGE_KEY);
     }
 
     function tabTitleSettingChanged() {
-        saveToStorage(CHANGE_TAB_TITLE_SETTING_STORAGE_KEY, changeTabTitles);
+        storageService.set(CHANGE_TAB_TITLE_SETTING_STORAGE_KEY, changeTabTitles);
     }
 </script>
