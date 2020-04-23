@@ -1,3 +1,5 @@
+import { tryMoveTabToWorkspaceWindow, getMatchingWorkspace } from './tab-workspace-matcher';
+
 chrome.runtime.onInstalled.addListener(() => {
     chrome.runtime.openOptionsPage();
 });
@@ -9,7 +11,7 @@ chrome.browserAction.onClicked.addListener(() => {
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.url) {
         console.debug('tab url updated');
-        tabWorkspaceMatcher.tryMoveTabToWorkspaceWindow(tab);
+        tryMoveTabToWorkspaceWindow(tab);
     }
 });
 
@@ -25,8 +27,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 async function getMatchingWorkspaceOnTabRequest(request, sender) {
     let workspaces = await storageService.getWorkspaces();
-    let matchingWorkspace = tabWorkspaceMatcher.getMatchingWorkspace(workspaces, sender.tab.url);
-    console.log('got message from content script. matching workspace: ' + matchingWorkspace?.name);
+    let matchingWorkspace = getMatchingWorkspace(workspaces, sender.tab.url);
+    console.log(
+        'got message from content script. matching workspace: ' + matchingWorkspace ? matchingWorkspace.name : null
+    );
 
-    return { matchingWorkspaceName: matchingWorkspace?.name }; // response
+    return { matchingWorkspaceName: matchingWorkspace ? matchingWorkspace.name : null }; // response
 }
