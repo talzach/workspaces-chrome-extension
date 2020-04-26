@@ -1,6 +1,7 @@
 import { tryMoveTabToWorkspaceWindow } from './workspace-tab-matcher';
 import { isWorkspaceWindow, getMatchingWorkspace } from './workspace-service';
 import { setLastFocusedNonWorkspaceWin, removeLastFocusedNonWorkspaceWin } from './focused-windows-service';
+import { setSettingsOnInstall } from '../settings-service';
 
 chrome.browserAction.onClicked.addListener(() => {
     chrome.runtime.openOptionsPage();
@@ -55,8 +56,4 @@ async function getMatchingWorkspaceOnTabRequest(request, sender) {
 
 function getWorkspaceNameOrNull(workspace) {
     return workspace ? workspace.name : null;
-}
-
-function setSettingsOnInstall() {
-    storageService.set('changeTabTitles', true);
 }

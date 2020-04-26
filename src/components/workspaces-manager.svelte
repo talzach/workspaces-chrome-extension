@@ -30,7 +30,6 @@
 <script>
     import WorkspacesDrawer from './workspace/workspaces-drawer.svelte';
     import UrlsDrawer from './url/urls-drawer.svelte';
-    import { createWorkspace } from '../workspaces-service.js';
 
     export let workspaces = [];
 
@@ -54,6 +53,10 @@
             storageService.setWorkspaces(workspaces);
             selectWorkspace({ detail: createdWorkspace });
         }
+    }
+
+    function createWorkspace(name) {
+        return { name, urls: [] };
     }
 
     function isWorkspaceAlreadyExists(workspaceName) {
