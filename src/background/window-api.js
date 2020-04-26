@@ -1,3 +1,5 @@
+const getWindowParams = { populate: false, windowTypes: ['normal'] };
+
 export async function createWindow(tabId) {
     return new Promise((resolve) => {
         chrome.windows.create({ tabId }, (window) => resolve(window));
@@ -7,8 +9,6 @@ export async function createWindow(tabId) {
 export function focusWindow(windowId) {
     chrome.windows.update(windowId, { focused: true });
 }
-
-const getWindowParams = { populate: false, windowTypes: ['normal'] };
 
 export async function isWindowExists(id) {
     if (!id) {
@@ -35,7 +35,13 @@ export async function moveTab(tabId, windowId) {
     });
 }
 
-// Private Methods
+export async function getAll() {
+    return new Promise((resolve) => {
+        chrome.windows.getAll(getWindowParams, (windows) => {
+            resolve(windows);
+        });
+    });
+}
 
 function getWindowFailed(id) {
     console.log(

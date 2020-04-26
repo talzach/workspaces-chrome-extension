@@ -1,18 +1,18 @@
-import { tryMoveTabToWorkspaceWindow, getMatchingWorkspace } from './tab-workspace-matcher';
-
-chrome.runtime.onInstalled.addListener(() => {
-    chrome.runtime.openOptionsPage();
-});
+import {
+    tryMoveTabToWorkspaceWindow,
+    getMatchingWorkspace,
+    setLastFocusedNonWorkspaceWindowId,
+    removeLastFocusedNonWorkspaceWindowId,
+    isWorkspaceWindow,
+} from './tab-workspace-matcher';
 
 chrome.browserAction.onClicked.addListener(() => {
     chrome.runtime.openOptionsPage();
 });
 
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.url) {
-        console.debug('tab url updated');
-        tryMoveTabToWorkspaceWindow(tab);
-    }
+chrome.runtime.onInstalled.addListener(() => {
+    chrome.runtime.openOptionsPage();
+    setSettingsOnInstall();
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -25,12 +25,42 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true; // return true to indicate you want to send a response asynchronously
 });
 
-async function getMatchingWorkspaceOnTabRequest(request, sender) {
-    let workspaces = await storageService.getWorkspaces();
-    let matchingWorkspace = getMatchingWorkspace(workspaces, sender.tab.url);
-    console.log(
-        'got message from content script. matching workspace: ' + matchingWorkspace ? matchingWorkspace.name : null
-    );
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.url && changeInfo.url != 'chrome://newtab/') {
+        console.debug(`existing tab ${tabId} url updated with url: ${changeInfo.url}`);
+        tryMoveTabToWorkspaceWindow(tab);
+    }
+});
 
-    return { matchingWorkspaceName: matchingWorkspace ? matchingWorkspace.name : null }; // response
+chrome.windows.onFocusChanged.addListener(async (windowId) => {
+    let workspaces = await storageService.getWorkspaces();
+    if (workspaces && !isWorkspaceWindow(windowId, workspaces)) {
+        setLastFocusedNonWorkspaceWindowId(windowId);
+    }
+});
+
+chrome.windows.onRemoved.addListener((windowId) => {
+    removeLastFocusedNonWorkspaceWindowId(windowId);
+});
+
+async function getMatchingWorkspaceOnTabRequest(request, sender) {
+    let matchingWorkspace = null;
+    let workspaces = await storageService.getWorkspaces();
+
+    if (workspaces) {
+        matchingWorkspace = getMatchingWorkspace(workspaces, sender.tab.url);
+        console.log(
+            'got message from content script. matching workspace: ' + getWorkspaceNameOrNull(matchingWorkspace)
+        );
+    }
+
+    return { matchingWorkspaceName: getWorkspaceNameOrNull(matchingWorkspace) }; // response
+}
+
+function getWorkspaceNameOrNull(workspace) {
+    return workspace ? workspace.name : null;
+}
+
+function setSettingsOnInstall() {
+    storageService.set('changeTabTitles', true);
 }

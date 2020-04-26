@@ -6,7 +6,7 @@
             width="16"
             height="16"
             class="icon" />
-        <Text>{url}</Text>
+        <a href={url}>{url}</a>
         <span class="hover-icon-button-wrapper">
             <Button class="hover-icon-button" on:click={() => deleteUrlDialog.open()}>
                 <i class="material-icons">clear</i>
@@ -50,10 +50,6 @@
     .item:hover .hover-icon-button-wrapper {
         opacity: 1;
         margin-right: -7px;
-    }
-
-    :global(.item .mdc-list-item__text) {
-        cursor: text;
     }
 </style>
 
