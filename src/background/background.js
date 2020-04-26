@@ -1,10 +1,6 @@
-import {
-    tryMoveTabToWorkspaceWindow,
-    getMatchingWorkspace,
-    setLastFocusedNonWorkspaceWindowId,
-    removeLastFocusedNonWorkspaceWindowId,
-    isWorkspaceWindow,
-} from './tab-workspace-matcher';
+import { tryMoveTabToWorkspaceWindow } from './workspace-tab-matcher';
+import { isWorkspaceWindow, getMatchingWorkspace } from './workspace-service';
+import { setLastFocusedNonWorkspaceWin, removeLastFocusedNonWorkspaceWin } from './focused-windows-service';
 
 chrome.browserAction.onClicked.addListener(() => {
     chrome.runtime.openOptionsPage();
@@ -35,12 +31,12 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 chrome.windows.onFocusChanged.addListener(async (windowId) => {
     let workspaces = await storageService.getWorkspaces();
     if (workspaces && !isWorkspaceWindow(windowId, workspaces)) {
-        setLastFocusedNonWorkspaceWindowId(windowId);
+        setLastFocusedNonWorkspaceWin(windowId);
     }
 });
 
 chrome.windows.onRemoved.addListener((windowId) => {
-    removeLastFocusedNonWorkspaceWindowId(windowId);
+    removeLastFocusedNonWorkspaceWin(windowId);
 });
 
 async function getMatchingWorkspaceOnTabRequest(request, sender) {
