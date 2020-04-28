@@ -2,7 +2,6 @@
     "manifest_version": 2,
     "name": "Workspaces",
     "version": "1.0.5",
-    "default_locale": "en",
     "description": "Manage your work by grouping tabs from similar domains into a single chrome window",
     "icons": {
         "16": "images/workspaces-icon-16.png",
