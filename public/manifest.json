@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Workspaces",
-    "version": "1.0.3",
+    "version": "1.0.5",
     "icons": {
         "16": "images/workspaces-icon-16.png",
         "48": "images/workspaces-icon-48.png",
@@ -20,12 +20,12 @@
         "persistent": false
     },
     "content_scripts": [{
-        "matches": ["*://*/*"],
+        "matches": ["<all_urls>"],
         "js": ["storage-service.js", "content.js"]
     }],
     "options_ui": {
         "page": "index.html",
         "open_in_tab": true
     },
-    "web_accessible_resources": ["build/bundle.js.map"]
+    "web_accessible_resources": ["build/bundle.css.map"]
 }

@@ -6,7 +6,7 @@ import { CHANGE_TAB_TITLE_SETTING_STORAGE_KEY, HOMOGENIC_WORKSPACES_SETTING_STOR
 export async function tryMoveTabToWorkspaceWindow(tab) {
     const workspaceOnlyTabsSetting = await storageService.get(CHANGE_TAB_TITLE_SETTING_STORAGE_KEY);
 
-    if (workspaceOnlyTabsSetting == undefined || workspaceOnlyTabsSetting) {
+    if (workspaceOnlyTabsSetting) {
         let workspaces = await storageService.getWorkspaces();
 
         if (workspaces) {
@@ -22,7 +22,7 @@ export async function tryMoveTabToWorkspaceWindow(tab) {
 async function removeTabFromWorkspaceWindowCaseNeeded(tab, workspaces) {
     const homogenicWorkspacesSetting = await storageService.get(HOMOGENIC_WORKSPACES_SETTING_STORAGE_KEY);
 
-    if (homogenicWorkspacesSetting == undefined || homogenicWorkspacesSetting) {
+    if (homogenicWorkspacesSetting) {
         removeTabFromWorkspaceWindow(tab, workspaces);
     }
 }

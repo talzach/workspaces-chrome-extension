@@ -2,6 +2,7 @@ import { createWindow, isWindowExists } from './window-api';
 import { moveTabToExistingWindow } from './workspace-tab-mover';
 import { isWorkspaceWindow } from './workspace-service';
 import { isFocusedNonWorkspaceWinsEmpty, getLastNonWorkspaceFocusedWinId } from './focused-windows-service';
+import { getWindowState } from '../settings-service';
 
 export async function removeTabFromWorkspaceWindow(tab, workspaces) {
     if (isWorkspaceWindow(tab.windowId, workspaces)) {
@@ -20,6 +21,7 @@ async function findNonWorkspaceWinAndMoveTab(tab, workspaces) {
             findNonWorkspaceWinAndMoveTab(tab, workspaces); // recursion
         }
     } else {
-        await createWindow(tab.id);
+        const windowState = await getWindowState();
+        await createWindow(tab.id, windowState);
     }
 }

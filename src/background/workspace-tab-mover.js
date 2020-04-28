@@ -1,4 +1,5 @@
 import { isWindowExists, createWindow, focusWindow, highlightTab, moveTab } from './window-api';
+import { getWindowState } from '../settings-service';
 
 export async function moveTabToMatchingWorkspace(tab, matchingWorkspace, workspaces) {
     console.log(`found matching workspace
@@ -39,7 +40,8 @@ async function getMoveAction(tab, matchingWorkspace) {
 }
 
 async function moveTabToNewWindow(tab, matchingWorkspace, workspaces) {
-    const newWindow = await createWindow(tab.id);
+    const windowState = await getWindowState();
+    const newWindow = await createWindow(tab.id, windowState);
     const matchingWorkspaceWithWindow = addWindowIdToWorkspace(matchingWorkspace, newWindow);
     updateWorkspacesWithGivenWorkspaceAndSave(workspaces, matchingWorkspaceWithWindow);
     console.log('%ccreated a new window and moved the tab in!', 'color: green');

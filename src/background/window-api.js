@@ -1,8 +1,8 @@
 const getWindowParams = { populate: false, windowTypes: ['normal'] };
 
-export async function createWindow(tabId) {
+export async function createWindow(tabId, state) {
     return new Promise((resolve) => {
-        chrome.windows.create({ tabId }, (window) => resolve(window));
+        chrome.windows.create({ tabId, state }, (window) => resolve(window));
     });
 }
 
