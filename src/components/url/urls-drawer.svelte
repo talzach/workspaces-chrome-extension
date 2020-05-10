@@ -4,23 +4,38 @@
             <div class="url-list">
                 <List>
                     {#each selectedWorkspace.urls as url}
-                        <UrlItem {url} on:deleteUrl={deleteUrl} />
+                        {#if url}
+                            <UrlItem {url} on:deleteUrl={deleteUrl} />
+                        {/if}
                     {/each}
                 </List>
             </div>
         {:else}
-            <div class="empty-state">Nothing here yet... Add URL addresses</div>
+            <div class="empty-state">
+                <div class="empty-state-title">Add workspace sites</div>
+                <div class="empty-state-sub-title">
+                    Add the sites you want to include in this workspace using the input below
+                </div>
+            </div>
         {/if}
         <div>
             <Separator nav />
             <div class="add-item-container">
-                <AddItem type="url" label="New URL" on:newItem={addUrl} bind:addItemRef={addUrlItemRef} />
+                <AddItem
+                    type="url"
+                    label="New URL (https://example.com)"
+                    on:newItem={checkAndAddUrl}
+                    bind:addItemRef={addUrlItemRef} />
             </div>
         </div>
     {:else}
-        <div class="empty-state">No workspaces</div>
+        <div class="empty-state">
+            <div class="empty-state-title">Add workspace</div>
+            <div class="empty-state-sub-title">Add a new workspace using the bottom left input</div>
+        </div>
     {/if}
 </div>
+<SpecificUrlWarningDialog bind:dialog={specificUrlWarningDialog} on:addUrl={addUrl} />
 
 <style>
     .content {
@@ -39,10 +54,16 @@
         justify-content: space-between;
     }
     .empty-state {
-        color: lightgray;
-        font-size: 40px;
         margin: auto 0;
         text-align: center;
+        color: lightgray;
+    }
+    .empty-state-title {
+        font-size: 40px;
+    }
+    .empty-state-sub-title {
+        margin-top: 10px;
+        font-size: 25px;
     }
 </style>
 
@@ -52,17 +73,29 @@
     import AddItem from '../add-item.svelte';
     import UrlItem from './url-item.svelte';
     import Button, { Label } from '@smui/button';
+    import SpecificUrlWarningDialog from './specific-url-warning-dialog.svelte';
 
     export let selectedWorkspace;
     export let addUrlItemRef = null;
 
     const dispatch = createEventDispatcher();
+    let specificUrlWarningDialog;
+    let urlToAdd;
 
-    function addUrl(event) {
-        dispatch('addUrl', event.detail);
+    function checkAndAddUrl({ detail: url }) {
+        urlToAdd = url;
+        getUrlSearch(urlToAdd) ? specificUrlWarningDialog.open() : addUrl();
+    }
+
+    function addUrl() {
+        dispatch('addUrl', urlToAdd);
     }
 
     function deleteUrl(event) {
         dispatch('deleteUrl', event.detail);
+    }
+
+    function getUrlSearch(url) {
+        return new URL(url).search;
     }
 </script>

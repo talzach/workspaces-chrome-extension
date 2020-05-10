@@ -58,7 +58,7 @@
 <script>
     import IconButton from '@smui/icon-button';
     import WorkspacesManager from './components/workspaces-manager.svelte';
-    import SettingsDialog from './components/settings.svelte';
+    import SettingsDialog from './components/settings-dialog.svelte';
     import Drawer, { AppContent } from '@smui/drawer';
 
     let workspaces = [];

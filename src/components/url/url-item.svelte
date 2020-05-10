@@ -6,7 +6,7 @@
             width="16"
             height="16"
             class="icon" />
-        <a href={url}>{url}</a>
+        <a href={url} target="_blank" class="url">{url}</a>
         <span class="hover-icon-button-wrapper">
             <Button class="hover-icon-button" on:click={() => deleteUrlDialog.open()}>
                 <i class="material-icons">clear</i>
@@ -21,8 +21,12 @@
     aria-labelledby="event-title"
     aria-describedby="event-content"
     on:MDCDialog:closed={deleteUrlHandler}>
-    <DialogTitle id="event-title">Delete {url} url</DialogTitle>
-    <DialogContent id="event-content">Are you sure you want to delete this URL?</DialogContent>
+    <DialogTitle id="event-title">Delete URL</DialogTitle>
+    <DialogContent id="event-content">
+        Are you sure you want to delete the URL?
+        <br />
+        {url}
+    </DialogContent>
     <Actions>
         <Button action="delete">
             <Label>Delete</Label>
@@ -38,6 +42,11 @@
         width: 100%;
         display: flex;
         line-height: 41px;
+    }
+    .url {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
     .icon {
         align-self: center;
