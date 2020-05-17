@@ -14,12 +14,21 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (sender.tab && request.getMatchingWorkspace) {
-        getMatchingWorkspaceOnTabRequest(request, sender).then(sendResponse);
+        getMatchingWorkspaceOnTabRequest(sender.tab.windowId).then(sendResponse);
     } else {
         Promise.resolve(null);
     }
 
     return true; // return true to indicate you want to send a response asynchronously
+});
+
+chrome.tabs.onAttached.addListener(async (tabId, { newWindowId }) => {
+    const changeTabTitlesSetting = await storageService.get('changeTabTitles');
+
+    if (changeTabTitlesSetting) {
+        let matchingWorkspace = await getMatchingWorkspaceOnTabRequest(newWindowId);
+        chrome.tabs.sendMessage(tabId, { tabMoved: matchingWorkspace });
+    }
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
@@ -40,12 +49,13 @@ chrome.windows.onRemoved.addListener((windowId) => {
     removeLastFocusedNonWorkspaceWin(windowId);
 });
 
-async function getMatchingWorkspaceOnTabRequest(request, sender) {
+async function getMatchingWorkspaceOnTabRequest(windowId) {
     let matchingWorkspace = null;
     let workspaces = await storageService.getWorkspaces();
 
     if (workspaces) {
-        matchingWorkspace = getMatchingWorkspace(workspaces, sender.tab.url);
+        console.log('window id', windowId);
+        matchingWorkspace = workspaces.find((x) => x.windowId == windowId);
         console.log(
             'got message from content script. matching workspace: ' + getWorkspaceNameOrNull(matchingWorkspace)
         );
