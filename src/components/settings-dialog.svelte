@@ -7,7 +7,7 @@
                 <span slot="label" class="tooltip">
                     Prefix workspace name
                     <span class="tooltiptext">
-                        Rether tab titles will be prefixed with the workspace name in squere brackets
+                        Rather tab titles will be prefixed with the workspace name in squere brackets
                     </span>
                 </span>
             </FormField>
@@ -15,14 +15,14 @@
                 <Switch bind:checked={isHomogenicWorkspaces} on:change={homogenicWorkspacesSettingChanged} />
                 <span slot="label" class="tooltip">
                     Homogenic workspaces
-                    <span class="tooltiptext">Rether non-workspace tabs will be moved from workspace windows</span>
+                    <span class="tooltiptext">Rather non-workspace tabs will be moved from workspace windows</span>
                 </span>
             </FormField>
             <FormField class="settings-field">
                 <Switch bind:checked={isMaxWindow} on:change={maxWindowSettingChanged} />
                 <span slot="label" class="tooltip">
                     Maximized window state
-                    <span class="tooltiptext">Rether new workspace windows will open in maximized window size</span>
+                    <span class="tooltiptext">Rather new workspace windows will open in maximized window size</span>
                 </span>
             </FormField>
         </div>
